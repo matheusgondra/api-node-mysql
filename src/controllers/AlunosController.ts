@@ -11,6 +11,12 @@ class AlunosController {
       Model.getAlunoById(res, id);
    }
 
+   static updateAluno(req: Request, res: Response) {
+		const { id } = req.params;
+      const data = req.body;
+      Model.updateAluno(res, Number(id), data);
+   }
+
    static createAluno(req: Request, res: Response) {
       const data = req.body;
       Model.createAluno(res, data);
