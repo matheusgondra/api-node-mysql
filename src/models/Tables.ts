@@ -1,5 +1,9 @@
+import { Connection } from "mysql2";
+
 class Tables {
-   init(connection) {
+	private connection: Connection;
+
+   constructor(connection: Connection) {
       this.connection = connection;
       this.createTableAlunos();
    }
@@ -17,4 +21,4 @@ class Tables {
    }
 }
 
-export default new Tables;
+export default Tables;

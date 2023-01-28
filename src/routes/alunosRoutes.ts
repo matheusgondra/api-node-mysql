@@ -1,7 +1,7 @@
-import express from "express";
+import { Router } from "express";
 import AlunosController from "../controllers/AlunosController.js";
 
-const router = express.Router();
+const router = Router();
 
 router
    .get("/alunos", AlunosController.getAlunos)

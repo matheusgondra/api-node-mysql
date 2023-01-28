@@ -7,8 +7,8 @@ connection.connect(error => {
       console.error(error);
    } else {
       console.log("Conectado com sucesso!");
-
-      Tables.init(connection);
+		
+		const tables = new Tables(connection);
       
       const app = customApp();
 
