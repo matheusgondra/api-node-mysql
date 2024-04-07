@@ -3,13 +3,9 @@ import routes from "../routes";
 import cors from "cors";
 
 export default () => {
-   const app = express();
+	const app = express();
 
-   app.use(
-      express.json(),
-      ...routes,
-		cors()
-   );
+	app.use(express.json(), ...routes, cors());
 
-   return app;
+	return app;
 };
