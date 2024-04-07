@@ -1,24 +1,42 @@
 import { CreateStudentController } from "../../../src/presentation/controllers/create-student";
-import { Validation } from "../../../src/presentation/protocols";
+import { HttpRequest, Validation } from "../../../src/presentation/protocols";
+
+const makeValidationStub = (): Validation => {
+	class ValidationStub implements Validation {
+		validate(input: any): Error | null {
+			return null;
+		}
+	}
+	return new ValidationStub();
+};
+
+interface SutTypes {
+	sut: CreateStudentController;
+	validationStub: Validation;
+}
+
+const makeSut = (): SutTypes => {
+	const validationStub = makeValidationStub();
+	const sut = new CreateStudentController(validationStub);
+	return {
+		sut,
+		validationStub
+	};
+};
+
+const makeFakeRequest = (): HttpRequest => ({
+	body: {
+		name: "any_name",
+		cpf: "any_cpf",
+		responsible: "any_responsible"
+	}
+});
 
 describe("CreateStudentController", () => {
 	it("Should call Validation with correct values", async () => {
-		class ValidationStub implements Validation {
-			validate(input: any): Error | null {
-				return null;
-			}
-		}
-		const validationStub = new ValidationStub();
-		const sut = new CreateStudentController(validationStub);
+		const { sut, validationStub } = makeSut();
 		const validationSpy = jest.spyOn(validationStub, "validate");
-		const httpRequest = {
-			body: {
-				name: "any_name",
-				cpf: "any_cpf",
-				responsible: "any_responsible"
-			}
-		};
-		await sut.handle(httpRequest);
-		expect(validationSpy).toHaveBeenCalledWith(httpRequest.body);
+		await sut.handle(makeFakeRequest());
+		expect(validationSpy).toHaveBeenCalledWith(makeFakeRequest().body);
 	});
 });
