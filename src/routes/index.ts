@@ -1,3 +1,3 @@
-import alunos from "./alunosRoutes.js";
+import alunos from "./alunosRoutes";
 
 export default [alunos];

@@ -1,4 +1,4 @@
-import connection from "../config/connection.js";
+import connection from "../config/connection";
 import { Response } from "express";
 
 interface IAlunos {
@@ -21,9 +21,9 @@ class Alunos {
    }
 
    static getAlunoById(res: Response, id: string) {
-      const sql = `SELECT * FROM alunos WHERE matricula = ${id}`;
+      const sql = `SELECT * FROM alunos WHERE matricula = ?`;
 
-      connection.query(sql, (err, resul) => {
+      connection.query(sql, [id], (err, resul) => {
          if (err) {
             return res.status(500).json({ message: err });
          } else {
@@ -44,9 +44,9 @@ class Alunos {
    }
 
 	static updateAluno(res: Response, id: number, data: IAlunos) {
-		const sql = `UPDATE alunos SET nome = ?, cpf = ?, responsavel = ? WHERE matricula = ${id};`;
+		const sql = `UPDATE alunos SET nome = ?, cpf = ?, responsavel = ? WHERE matricula = ?;`;
 
-		connection.query(sql, [data.nome, data.cpf, data.responsavel], (err, result, filds) => {
+		connection.query(sql, [data.nome, data.cpf, data.responsavel, id], (err, result, filds) => {
 			if(err) {
 				return res.status(500).json({ message: err });
 			} else {
@@ -56,9 +56,9 @@ class Alunos {
 	}
 
    static deleteAluno(res: Response, id: string) {
-      const sql = `DELETE FROM alunos WHERE matricula = ${id}`;
+      const sql = `DELETE FROM alunos WHERE matricula = ?`;
 
-      connection.query(sql, (err, resul) => {
+      connection.query(sql, [id], (err, resul) => {
          if (err) {
             return res.status(500).json({ message: err });
          } else {

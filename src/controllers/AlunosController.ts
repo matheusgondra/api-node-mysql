@@ -1,4 +1,4 @@
-import Model from "../models/Alunos.js";
+import Model from "../models/Alunos";
 import { Request, Response } from "express";
 
 class AlunosController {

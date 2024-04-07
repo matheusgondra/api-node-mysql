@@ -1,6 +1,6 @@
-import customApp from "./config/customApp.js";
-import connection from "./config/connection.js";
-import Tables from "./models/Tables.js";
+import customApp from "./config/customApp";
+import connection from "./config/connection";
+import Tables from "./models/Tables";
 
 connection.connect(error => {
    if (error) {
