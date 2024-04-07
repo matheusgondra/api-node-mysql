@@ -10,10 +10,9 @@
     "lint:fix": "prettier --write src/**/*.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
-    "test:unit": "pnpm run test --watchAll -c ./jest.unit.config.js",
-    "test:integration": "pnpm run test --watchAll -c jest.integration.config.js",
+    "test:unit": "pnpm run test --watchAll -c ./jest-unit-config.js",
+    "test:integration": "pnpm run test --watchAll -c jest-integration-config.js",
     "test:staged": "pnpm run test --findRelatedTests",
-    "test:ci": "pnpm run test --coverage",
     "prepare": "husky",
     "lint-staged": "lint-staged"
   },
