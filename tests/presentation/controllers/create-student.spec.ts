@@ -1,4 +1,5 @@
 import { CreateStudentController } from "../../../src/presentation/controllers/create-student";
+import { badRequest } from "../../../src/presentation/helpers/http";
 import { HttpRequest, Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -38,5 +39,12 @@ describe("CreateStudentController", () => {
 		const validationSpy = jest.spyOn(validationStub, "validate");
 		await sut.handle(makeFakeRequest());
 		expect(validationSpy).toHaveBeenCalledWith(makeFakeRequest().body);
+	});
+
+	it("Should return 400 if Validation returns an error", async () => {
+		const { sut, validationStub } = makeSut();
+		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(badRequest(new Error()));
 	});
 });
