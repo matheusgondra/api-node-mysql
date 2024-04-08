@@ -1,6 +1,6 @@
 import { AddStudent } from "../../../src/domain/use-cases/add-student";
 import { CreateStudentController } from "../../../src/presentation/controllers/create-student";
-import { badRequest, serverError } from "../../../src/presentation/helpers/http";
+import { badRequest, created, serverError } from "../../../src/presentation/helpers/http";
 import { HttpRequest, Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -78,5 +78,16 @@ describe("CreateStudentController", () => {
 		jest.spyOn(addStudentStub, "add").mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return 201 if valid data is provided", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(
+			created({
+				id: 1,
+				...makeFakeRequest().body
+			})
+		);
 	});
 });
