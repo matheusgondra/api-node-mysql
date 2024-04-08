@@ -1,27 +1,45 @@
 import { DbAddStudent } from "../../../src/data/use-cases";
 import { AddStudentRepository } from "../../../src/data/protocols";
 
+const makeAddStudentRepositoryStub = (): AddStudentRepository => {
+	class AddStudentRepositoryStub implements AddStudentRepository {
+		async add(studentData: AddStudentRepository.Params): Promise<AddStudentRepository.Result> {
+			return {
+				id: 1,
+				name: "any_name",
+				cpf: "any_cpf",
+				responsible: "any_responsible"
+			};
+		}
+	}
+	return new AddStudentRepositoryStub();
+};
+
+interface SutTypes {
+	sut: DbAddStudent;
+	addStudentRepositoryStub: AddStudentRepository;
+}
+
+const makeSut = (): SutTypes => {
+	const addStudentRepositoryStub = makeAddStudentRepositoryStub();
+	const sut = new DbAddStudent(addStudentRepositoryStub);
+	return {
+		sut,
+		addStudentRepositoryStub
+	};
+};
+
+const makeFakeStudentData = () => ({
+	name: "any_name",
+	cpf: "any_cpf",
+	responsible: "any_responsible"
+});
+
 describe("DbAddStudent", () => {
 	it("Should call AddStudentRepository with correct values", async () => {
-		class AddStudentRepositoryStub implements AddStudentRepository {
-			async add(studentData: AddStudentRepository.Params): Promise<AddStudentRepository.Result> {
-				return {
-					id: 1,
-					name: "any_name",
-					cpf: "any_cpf",
-					responsible: "any_responsible"
-				};
-			}
-		}
-		const addStudentRepositoryStub = new AddStudentRepositoryStub();
-		const sut = new DbAddStudent(addStudentRepositoryStub);
+		const { sut, addStudentRepositoryStub } = makeSut();
 		const addSpy = jest.spyOn(addStudentRepositoryStub, "add");
-		const studentData = {
-			name: "any_name",
-			cpf: "any_cpf",
-			responsible: "any_responsible"
-		};
-		await sut.add(studentData);
-		expect(addSpy).toHaveBeenCalledWith(studentData);
+		await sut.add(makeFakeStudentData());
+		expect(addSpy).toHaveBeenCalledWith(makeFakeStudentData());
 	});
 });
