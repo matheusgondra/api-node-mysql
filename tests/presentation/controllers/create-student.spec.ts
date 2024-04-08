@@ -1,6 +1,6 @@
 import { AddStudent } from "../../../src/domain/use-cases/add-student";
 import { CreateStudentController } from "../../../src/presentation/controllers/create-student";
-import { badRequest } from "../../../src/presentation/helpers/http";
+import { badRequest, serverError } from "../../../src/presentation/helpers/http";
 import { HttpRequest, Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -71,5 +71,12 @@ describe("CreateStudentController", () => {
 		const addSpy = jest.spyOn(addStudentStub, "add");
 		await sut.handle(makeFakeRequest());
 		expect(addSpy).toHaveBeenCalledWith(makeFakeRequest().body);
+	});
+
+	it("Should return 500 if AddStudent throws", async () => {
+		const { sut, addStudentStub } = makeSut();
+		jest.spyOn(addStudentStub, "add").mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
