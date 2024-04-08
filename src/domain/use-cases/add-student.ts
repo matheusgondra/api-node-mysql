@@ -1,18 +1,11 @@
+import { StudentModel } from "../models";
+
 export interface AddStudent {
 	add(data: AddStudent.Params): Promise<AddStudent.Result>;
 }
 
 export namespace AddStudent {
-	export interface Params {
-		name: string;
-		cpf: string;
-		responsible: string;
-	}
+	export type Params = Omit<StudentModel, "id">;
 
-	export interface Result {
-		id: number;
-		name: string;
-		cpf: string;
-		responsible: string;
-	}
+	export type Result = StudentModel;
 }
