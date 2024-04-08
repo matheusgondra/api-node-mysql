@@ -49,4 +49,13 @@ describe("DbAddStudent", () => {
 		const promise = sut.add(makeFakeStudentData());
 		await expect(promise).rejects.toThrow();
 	});
+
+	it("Should return a student on success", async () => {
+		const { sut } = makeSut();
+		const student = await sut.add(makeFakeStudentData());
+		expect(student).toEqual({
+			id: 1,
+			...makeFakeStudentData()
+		});
+	});
 });
