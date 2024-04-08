@@ -1,5 +1,5 @@
 import { AddStudent } from "../../domain/use-cases/add-student";
-import { badRequest, serverError } from "../helpers/http";
+import { badRequest, created, serverError } from "../helpers/http";
 import { Controller, HttpRequest, HttpResponse, Validation } from "../protocols";
 
 export class CreateStudentController implements Controller {
@@ -15,12 +15,9 @@ export class CreateStudentController implements Controller {
 				return badRequest(error);
 			}
 
-			await this.addStudent.add(httpRequest.body);
+			const student = await this.addStudent.add(httpRequest.body);
 
-			return {
-				statusCode: 201,
-				body: null
-			};
+			return created(student);
 		} catch (error) {
 			return serverError(error as Error);
 		}
