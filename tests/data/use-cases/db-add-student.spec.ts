@@ -42,4 +42,11 @@ describe("DbAddStudent", () => {
 		await sut.add(makeFakeStudentData());
 		expect(addSpy).toHaveBeenCalledWith(makeFakeStudentData());
 	});
+
+	it("Should throw if AddStudentRepository throws", async () => {
+		const { sut, addStudentRepositoryStub } = makeSut();
+		jest.spyOn(addStudentRepositoryStub, "add").mockRejectedValueOnce(new Error());
+		const promise = sut.add(makeFakeStudentData());
+		await expect(promise).rejects.toThrow();
+	});
 });
