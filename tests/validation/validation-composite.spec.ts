@@ -37,4 +37,12 @@ describe("ValidationComposite", () => {
 		const error = sut.validate({ name: "any_name" });
 		expect(error).toEqual(new Error());
 	});
+
+	it("Should return the first error if more than one validation fails", () => {
+		const { sut, validationsStub } = makeSut();
+		jest.spyOn(validationsStub[0], "validate").mockReturnValueOnce(new Error("first error"));
+		jest.spyOn(validationsStub[1], "validate").mockReturnValueOnce(new Error("second error"));
+		const error = sut.validate({ name: "any_name" });
+		expect(error).toEqual(new Error("first error"));
+	});
 });
