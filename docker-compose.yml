@@ -1,0 +1,15 @@
+services:
+   db:
+      image: mysql
+      environment:
+         MYSQL_ROOT_PASSWORD: admin
+         MYSQL_DATABASE: api_mysql
+         MYSQL_USER: admin
+         MYSQL_PASSWORD: admin
+   db_test:
+      image: mysql
+      environment:
+         MYSQL_ROOT_PASSWORD: admin
+         MYSQL_DATABASE: api_mysql_test
+         MYSQL_USER: admin
+         MYSQL_PASSWORD: admin
