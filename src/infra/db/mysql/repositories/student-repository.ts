@@ -1,5 +1,5 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { AddStudentRepository } from "../../../../data/protocols";
+import { AddStudentRepository, LoadStudentsRepository } from "../../../../data/protocols";
 import { MySQLHelper } from "../helpers/mysql-helper";
 
 interface Student extends RowDataPacket {
@@ -9,7 +9,7 @@ interface Student extends RowDataPacket {
 	responsavel: string;
 }
 
-export class StudentRepository implements AddStudentRepository {
+export class StudentRepository implements AddStudentRepository, LoadStudentsRepository {
 	async add(studentData: AddStudentRepository.Params): Promise<AddStudentRepository.Result> {
 		const connection = await MySQLHelper.connect();
 		try {
@@ -29,5 +29,17 @@ export class StudentRepository implements AddStudentRepository {
 			await connection.rollback();
 			throw error;
 		}
+	}
+
+	async load(page: number, limit: number): Promise<LoadStudentsRepository.Result> {
+		const connection = await MySQLHelper.connect();
+		const offset = (page - 1) * limit;
+		const [result] = await connection.query<Student[]>("SELECT * FROM alunos LIMIT ? OFFSET ?;", [limit, offset]);
+		return result.map((student) => ({
+			id: student.matricula,
+			name: student.nome,
+			cpf: student.cpf,
+			responsible: student.responsavel
+		}));
 	}
 }
