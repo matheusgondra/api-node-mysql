@@ -1,7 +1,7 @@
 import { StudentModel } from "../../../src/domain/models";
 import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
-import { badRequest, ok, serverError } from "../../../src/presentation/helpers/http";
+import { badRequest, noContent, ok, serverError } from "../../../src/presentation/helpers/http";
 import { Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -108,5 +108,12 @@ describe("LoadStudentsController", () => {
 				}
 			])
 		);
+	});
+
+	it("Should return 204 if LoadStudents returns an empty array", async () => {
+		const { sut, loadStudentsStub } = makeSut();
+		jest.spyOn(loadStudentsStub, "load").mockResolvedValueOnce([]);
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(noContent());
 	});
 });
