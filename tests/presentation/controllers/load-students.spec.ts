@@ -1,3 +1,5 @@
+import { StudentModel } from "../../../src/domain/models";
+import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
 import { badRequest } from "../../../src/presentation/helpers/http";
 import { Validation } from "../../../src/presentation/protocols";
@@ -11,17 +13,42 @@ const makeValidationStub = (): Validation => {
 	return new ValidationStub();
 };
 
+const makeLoadStudentsStub = (): LoadStudents => {
+	class LoadStudentsStub implements LoadStudents {
+		async load(page: number, limit: number): Promise<StudentModel[]> {
+			return [
+				{
+					id: 1,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				},
+				{
+					id: 2,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				}
+			];
+		}
+	}
+	return new LoadStudentsStub();
+};
+
 interface SutTypes {
 	sut: LoadStudentsController;
 	validationStub: Validation;
+	loadStudentsStub: LoadStudents;
 }
 
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidationStub();
-	const sut = new LoadStudentsController(validationStub);
+	const loadStudentsStub = makeLoadStudentsStub();
+	const sut = new LoadStudentsController(validationStub, loadStudentsStub);
 	return {
 		sut,
-		validationStub
+		validationStub,
+		loadStudentsStub
 	};
 };
 
@@ -46,5 +73,12 @@ describe("LoadStudentsController", () => {
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(badRequest(new Error()));
+	});
+
+	it("Should call LoadStudents with correct values", async () => {
+		const { sut, loadStudentsStub } = makeSut();
+		const loadSpy = jest.spyOn(loadStudentsStub, "load");
+		await sut.handle(makeFakeRequest());
+		expect(loadSpy).toHaveBeenCalledWith(1, 6);
 	});
 });
