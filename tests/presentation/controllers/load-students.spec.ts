@@ -1,7 +1,7 @@
 import { StudentModel } from "../../../src/domain/models";
 import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
-import { badRequest, serverError } from "../../../src/presentation/helpers/http";
+import { badRequest, ok, serverError } from "../../../src/presentation/helpers/http";
 import { Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -87,5 +87,26 @@ describe("LoadStudentsController", () => {
 		jest.spyOn(loadStudentsStub, "load").mockRejectedValueOnce(new Error());
 		const httpResponse = await sut.handle(makeFakeRequest());
 		expect(httpResponse).toEqual(serverError(new Error()));
+	});
+
+	it("Should return 200 on success", async () => {
+		const { sut } = makeSut();
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(
+			ok([
+				{
+					id: 1,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				},
+				{
+					id: 2,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				}
+			])
+		);
 	});
 });
