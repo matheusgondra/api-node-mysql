@@ -1,5 +1,5 @@
 import { LoadStudents } from "../../domain/use-cases";
-import { badRequest } from "../helpers/http";
+import { badRequest, serverError } from "../helpers/http";
 import { Controller, HttpRequest, HttpResponse, Validation } from "../protocols";
 
 export class LoadStudentsController implements Controller {
@@ -9,17 +9,21 @@ export class LoadStudentsController implements Controller {
 	) {}
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const error = this.validation.validate(httpRequest.params);
-		if (error) {
-			return badRequest(error);
+		try {
+			const error = this.validation.validate(httpRequest.params);
+			if (error) {
+				return badRequest(error);
+			}
+
+			const { page, limit } = httpRequest.params;
+			await this.loadStudents.load(parseInt(page), parseInt(limit));
+
+			return {
+				statusCode: 200,
+				body: {}
+			};
+		} catch (error) {
+			return serverError(error as Error);
 		}
-
-		const { page, limit } = httpRequest.params;
-		await this.loadStudents.load(parseInt(page), parseInt(limit));
-
-		return {
-			statusCode: 200,
-			body: {}
-		};
 	}
 }
