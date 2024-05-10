@@ -47,5 +47,11 @@ describe("StudentRepository", () => {
 			const students = await sut.load(1, 6);
 			expect(students).toEqual([student]);
 		});
+
+		it("Should return an empty list if there are no students", async () => {
+			const sut = makeSut();
+			const students = await sut.load(1, 6);
+			expect(students).toEqual([]);
+		});
 	});
 });
