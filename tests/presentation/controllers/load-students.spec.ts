@@ -1,4 +1,3 @@
-import { StudentModel } from "../../../src/domain/models";
 import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
 import { badRequest, noContent, ok, serverError } from "../../../src/presentation/helpers/http";
@@ -15,7 +14,7 @@ const makeValidationStub = (): Validation => {
 
 const makeLoadStudentsStub = (): LoadStudents => {
 	class LoadStudentsStub implements LoadStudents {
-		async load(page: number, limit: number): Promise<StudentModel[]> {
+		async load(page: number, limit: number): Promise<LoadStudents.Result> {
 			return [
 				{
 					id: 1,

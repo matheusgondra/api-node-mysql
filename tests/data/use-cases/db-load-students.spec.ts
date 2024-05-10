@@ -1,10 +1,9 @@
-import { StudentModel } from "../../../src/domain/models";
 import { LoadStudentsRepository } from "../../../src/data/protocols";
 import { DbLoadStudents } from "../../../src/data/use-cases";
 
 const makeLoadStudentsRepositoryStub = (): LoadStudentsRepository => {
 	class LoadStudentsRepositoryStub implements LoadStudentsRepository {
-		async load(): Promise<StudentModel[]> {
+		async load(): Promise<LoadStudentsRepository.Result> {
 			return [
 				{
 					id: 1,
