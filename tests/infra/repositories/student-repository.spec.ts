@@ -6,6 +6,12 @@ const makeSut = (): StudentRepository => {
 	return sut;
 };
 
+const makeFakeStudentData = () => ({
+	name: "any_name",
+	cpf: "any_cpf",
+	responsible: "any_responsible"
+});
+
 describe("StudentRepository", () => {
 	beforeAll(async () => {
 		await MySQLHelper.connect();
@@ -21,19 +27,25 @@ describe("StudentRepository", () => {
 		await MySQLHelper.disconnect();
 	});
 
-	it("Should return a student on success", async () => {
-		const sut = makeSut();
-		const studentData = {
-			name: "any_name",
-			cpf: "any_cpf",
-			responsible: "any_responsible"
-		};
-		const student = await sut.add(studentData);
-		expect(student).toEqual({
-			id: expect.any(Number),
-			name: "any_name",
-			cpf: "any_cpf",
-			responsible: "any_responsible"
+	describe("add()", () => {
+		it("Should return a student on success", async () => {
+			const sut = makeSut();
+			const student = await sut.add(makeFakeStudentData());
+			expect(student).toEqual({
+				id: expect.any(Number),
+				name: "any_name",
+				cpf: "any_cpf",
+				responsible: "any_responsible"
+			});
+		});
+	});
+
+	describe("load()", () => {
+		it("Should return a list of students on success", async () => {
+			const sut = makeSut();
+			const student = await sut.add(makeFakeStudentData());
+			const students = await sut.load(1, 6);
+			expect(students).toEqual([student]);
 		});
 	});
 });
