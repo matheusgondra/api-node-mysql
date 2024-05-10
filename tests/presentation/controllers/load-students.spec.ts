@@ -1,7 +1,7 @@
 import { StudentModel } from "../../../src/domain/models";
 import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
-import { badRequest } from "../../../src/presentation/helpers/http";
+import { badRequest, serverError } from "../../../src/presentation/helpers/http";
 import { Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
@@ -80,5 +80,12 @@ describe("LoadStudentsController", () => {
 		const loadSpy = jest.spyOn(loadStudentsStub, "load");
 		await sut.handle(makeFakeRequest());
 		expect(loadSpy).toHaveBeenCalledWith(1, 6);
+	});
+
+	it("Should return 500 if LoadStudents throws", async () => {
+		const { sut, loadStudentsStub } = makeSut();
+		jest.spyOn(loadStudentsStub, "load").mockRejectedValueOnce(new Error());
+		const httpResponse = await sut.handle(makeFakeRequest());
+		expect(httpResponse).toEqual(serverError(new Error()));
 	});
 });
