@@ -71,4 +71,11 @@ describe("DbLoadStudents", () => {
 			}
 		]);
 	});
+
+	it("Should return an empty list if LoadStudentsRepository returns an empty list", async () => {
+		const { sut, loadStudentsRepositoryStub } = makeSut();
+		jest.spyOn(loadStudentsRepositoryStub, "load").mockReturnValueOnce(Promise.resolve([]));
+		const students = await sut.load(1, 6);
+		expect(students).toEqual([]);
+	});
 });
