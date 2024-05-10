@@ -52,4 +52,23 @@ describe("DbLoadStudents", () => {
 		const promise = sut.load(1, 6);
 		await expect(promise).rejects.toThrow();
 	});
+
+	it("Should return a list of students on success", async () => {
+		const { sut } = makeSut();
+		const students = await sut.load(1, 6);
+		expect(students).toEqual([
+			{
+				id: 1,
+				name: "any_name",
+				cpf: "any_cpf",
+				responsible: "any_responsible"
+			},
+			{
+				id: 2,
+				name: "any_name",
+				cpf: "any_cpf",
+				responsible: "any_responsible"
+			}
+		]);
+	});
 });
