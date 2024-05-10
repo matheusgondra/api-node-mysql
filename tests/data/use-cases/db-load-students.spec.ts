@@ -45,4 +45,11 @@ describe("DbLoadStudents", () => {
 		await sut.load(1, 6);
 		expect(loadSpy).toHaveBeenCalledWith(1, 6);
 	});
+
+	it("Should throw if LoadStudentsRepository throws", async () => {
+		const { sut, loadStudentsRepositoryStub } = makeSut();
+		jest.spyOn(loadStudentsRepositoryStub, "load").mockReturnValueOnce(Promise.reject(new Error()));
+		const promise = sut.load(1, 6);
+		await expect(promise).rejects.toThrow();
+	});
 });
