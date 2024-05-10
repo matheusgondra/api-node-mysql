@@ -1,5 +1,5 @@
 import { LoadStudents } from "../../domain/use-cases";
-import { badRequest, ok, serverError } from "../helpers/http";
+import { badRequest, noContent, ok, serverError } from "../helpers/http";
 import { Controller, HttpRequest, HttpResponse, Validation } from "../protocols";
 
 export class LoadStudentsController implements Controller {
@@ -17,8 +17,7 @@ export class LoadStudentsController implements Controller {
 
 			const { page, limit } = httpRequest.params;
 			const students = await this.loadStudents.load(parseInt(page), parseInt(limit));
-
-			return ok(students);
+			return students.length ? ok(students) : noContent();
 		} catch (error) {
 			return serverError(error as Error);
 		}
