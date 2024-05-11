@@ -10,13 +10,13 @@ export class LoadStudentsController implements Controller {
 
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
 		try {
-			const error = this.validation.validate(httpRequest.params);
+			const error = this.validation.validate(httpRequest.query);
 			if (error) {
 				return badRequest(error);
 			}
 
-			const page = httpRequest.params.page ? parseInt(httpRequest.params.page) : 1;
-			const limit = httpRequest.params.limit ? parseInt(httpRequest.params.limit) : 6;
+			const page = httpRequest.query.page ? parseInt(httpRequest.query.page) : 1;
+			const limit = httpRequest.query.limit ? parseInt(httpRequest.query.limit) : 6;
 			const students = await this.loadStudents.load(page, limit);
 			return students.length ? ok(students) : noContent();
 		} catch (error) {

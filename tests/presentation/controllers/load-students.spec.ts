@@ -1,7 +1,7 @@
 import { LoadStudents } from "../../../src/domain/use-cases";
 import { LoadStudentsController } from "../../../src/presentation/controllers";
 import { badRequest, noContent, ok, serverError } from "../../../src/presentation/helpers/http";
-import { Validation } from "../../../src/presentation/protocols";
+import { HttpRequest, Validation } from "../../../src/presentation/protocols";
 
 const makeValidationStub = (): Validation => {
 	class ValidationStub implements Validation {
@@ -51,9 +51,9 @@ const makeSut = (): SutTypes => {
 	};
 };
 
-const makeFakeRequest = () => ({
+const makeFakeRequest = (): HttpRequest => ({
 	body: {},
-	params: {
+	query: {
 		page: 1,
 		limit: 6
 	}
@@ -64,7 +64,7 @@ describe("LoadStudentsController", () => {
 		const { sut, validationStub } = makeSut();
 		const validationSpy = jest.spyOn(validationStub, "validate");
 		await sut.handle(makeFakeRequest());
-		expect(validationSpy).toHaveBeenCalledWith(makeFakeRequest().params);
+		expect(validationSpy).toHaveBeenCalledWith(makeFakeRequest().query);
 	});
 
 	it("Should return 400 if Validation returns an error", async () => {
