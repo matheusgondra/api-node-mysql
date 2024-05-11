@@ -29,4 +29,10 @@ describe("PaginationValidation", () => {
 		const error = sut.validate({ page: 1, limit: 0 });
 		expect(error).toEqual(new InvalidParamError("limit"));
 	});
+
+	it("Should return null if page and limit are valid", () => {
+		const sut = makeSut();
+		const error = sut.validate({ page: 1, limit: 6 });
+		expect(error).toBeNull();
+	});
 });
