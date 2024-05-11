@@ -30,6 +30,14 @@ export class MySQLHelper {
 		this.client = null;
 	}
 
+	static async clearStudents(): Promise<void> {
+		if (!this.client) {
+			MySQLHelper.connect();
+		}
+		await this.client!.query("DELETE FROM alunos");
+		await this.client!.query("ALTER TABLE alunos AUTO_INCREMENT = 1");
+	}
+
 	private static async startDb(): Promise<void> {
 		this.client?.query(
 			"CREATE TABLE IF NOT EXISTS alunos (matricula INT NOT NULL AUTO_INCREMENT, nome VARCHAR(255) NOT NULL, cpf VARCHAR(11) NOT NULL, responsavel VARCHAR(255) NOT NULL, PRIMARY KEY(matricula));"

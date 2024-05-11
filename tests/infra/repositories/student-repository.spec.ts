@@ -18,9 +18,7 @@ describe("StudentRepository", () => {
 	});
 
 	beforeEach(async () => {
-		const connection = await MySQLHelper.connect();
-		await connection.query("DELETE FROM alunos");
-		await connection.query("ALTER TABLE alunos AUTO_INCREMENT = 1");
+		await MySQLHelper.clearStudents();
 	});
 
 	afterAll(async () => {
