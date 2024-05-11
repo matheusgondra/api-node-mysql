@@ -39,5 +39,9 @@ describe("Student Routes", () => {
 			});
 			await request(app).get("/students").set("page", "1").set("limit", "10").expect(200);
 		});
+
+		it("Should return 204 if no content", async () => {
+			await request(app).get("/students").expect(204);
+		});
 	});
 });
