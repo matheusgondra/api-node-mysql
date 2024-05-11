@@ -17,4 +17,10 @@ describe("PaginationValidation", () => {
 		const error = sut.validate({ page: 0, limit: 6 });
 		expect(error).toEqual(new InvalidParamError("page"));
 	});
+
+	it("Should return InvalidParamError if limit is not a number", () => {
+		const sut = makeSut();
+		const error = sut.validate({ page: 1, limit: "invalid_number" });
+		expect(error).toEqual(new InvalidParamError("limit"));
+	});
 });
