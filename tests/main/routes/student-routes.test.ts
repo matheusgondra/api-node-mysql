@@ -51,6 +51,32 @@ describe("Student Routes", () => {
 			expect(students.body.length).toBe(3);
 		});
 
+		it("Should return page 2 on load students", async () => {
+			for (let i = 0; i <= 3; i++) {
+				await request(app).post("/students").send({
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				});
+			}
+
+			const students = await request(app).get("/students").query({ page: 2, limit: 2 });
+			expect(students.body).toEqual([
+				{
+					id: 3,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				},
+				{
+					id: 4,
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				}
+			]);
+		});
+
 		it("Should return 204 if no content", async () => {
 			await request(app).get("/students").expect(204);
 		});
