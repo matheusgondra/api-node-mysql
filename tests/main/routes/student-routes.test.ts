@@ -7,18 +7,37 @@ describe("Student Routes", () => {
 		await MySQLHelper.connect();
 	});
 
+	beforeEach(async () => {
+		const connection = await MySQLHelper.connect();
+		await connection.query("DELETE FROM alunos");
+		await connection.query("ALTER TABLE alunos AUTO_INCREMENT = 1");
+	});
+
 	afterAll(async () => {
 		await MySQLHelper.disconnect();
 	});
 
-	it("Should return 201 on create student", async () => {
-		await request(app)
-			.post("/students")
-			.send({
+	describe("POST /students", () => {
+		it("Should return 201 on create student", async () => {
+			await request(app)
+				.post("/students")
+				.send({
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				})
+				.expect(201);
+		});
+	});
+
+	describe("GET /students", () => {
+		it("Should return 200 on load students", async () => {
+			await request(app).post("/students").send({
 				name: "any_name",
 				cpf: "any_cpf",
 				responsible: "any_responsible"
-			})
-			.expect(201);
+			});
+			await request(app).get("/students").set("page", "1").set("limit", "10").expect(200);
+		});
 	});
 });
