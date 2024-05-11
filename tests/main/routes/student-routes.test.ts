@@ -38,6 +38,19 @@ describe("Student Routes", () => {
 			await request(app).get("/students").expect(200);
 		});
 
+		it("Should return 3 students on load students", async () => {
+			for (let i = 0; i <= 3; i++) {
+				await request(app).post("/students").send({
+					name: "any_name",
+					cpf: "any_cpf",
+					responsible: "any_responsible"
+				});
+			}
+
+			const students = await request(app).get("/students").query({ page: 1, limit: 3 });
+			expect(students.body.length).toBe(3);
+		});
+
 		it("Should return 204 if no content", async () => {
 			await request(app).get("/students").expect(204);
 		});
