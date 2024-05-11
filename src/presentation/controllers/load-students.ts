@@ -15,8 +15,9 @@ export class LoadStudentsController implements Controller {
 				return badRequest(error);
 			}
 
-			const { page, limit } = httpRequest.params;
-			const students = await this.loadStudents.load(parseInt(page), parseInt(limit));
+			const page = httpRequest.params.page ? parseInt(httpRequest.params.page) : 1;
+			const limit = httpRequest.params.limit ? parseInt(httpRequest.params.limit) : 6;
+			const students = await this.loadStudents.load(page, limit);
 			return students.length ? ok(students) : noContent();
 		} catch (error) {
 			return serverError(error as Error);
