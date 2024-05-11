@@ -20,6 +20,10 @@ export class PaginationValidation implements Validation {
 			if (isNaN(limitNumber)) {
 				return new InvalidParamError("limit");
 			}
+
+			if (limitNumber < 1) {
+				return new InvalidParamError("limit");
+			}
 		}
 
 		return null;
