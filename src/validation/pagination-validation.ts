@@ -15,6 +15,13 @@ export class PaginationValidation implements Validation {
 			}
 		}
 
+		if (limit != undefined) {
+			const limitNumber = parseInt(limit);
+			if (isNaN(limitNumber)) {
+				return new InvalidParamError("limit");
+			}
+		}
+
 		return null;
 	}
 }
