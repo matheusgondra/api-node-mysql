@@ -23,4 +23,10 @@ describe("PaginationValidation", () => {
 		const error = sut.validate({ page: 1, limit: "invalid_number" });
 		expect(error).toEqual(new InvalidParamError("limit"));
 	});
+
+	it("Should return InvalidParamError if limit is less than 1", () => {
+		const sut = makeSut();
+		const error = sut.validate({ page: 1, limit: 0 });
+		expect(error).toEqual(new InvalidParamError("limit"));
+	});
 });
