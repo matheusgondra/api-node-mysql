@@ -3,6 +3,7 @@ import { StudentRepository } from "../../infra/db/mysql/repositories/student-rep
 import { CreateStudentController } from "../../presentation/controllers";
 import { Controller } from "../../presentation/protocols";
 import { RequiredFieldValidation, ValidationComposite } from "../../validation";
+import { TransactionDecorator } from "../decorators";
 
 export const makeCreateStudentController = (): Controller => {
 	const validations = [
@@ -13,5 +14,5 @@ export const makeCreateStudentController = (): Controller => {
 	const validation = new ValidationComposite(validations);
 	const addStudentRepository = new StudentRepository();
 	const addStudent = new DbAddStudent(addStudentRepository);
-	return new CreateStudentController(validation, addStudent);
+	return new TransactionDecorator(new CreateStudentController(validation, addStudent));
 };

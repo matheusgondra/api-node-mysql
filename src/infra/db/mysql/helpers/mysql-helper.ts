@@ -43,4 +43,11 @@ export class MySQLHelper {
 			"CREATE TABLE IF NOT EXISTS alunos (matricula INT NOT NULL AUTO_INCREMENT, nome VARCHAR(255) NOT NULL, cpf VARCHAR(11) NOT NULL, responsavel VARCHAR(255) NOT NULL, PRIMARY KEY(matricula));"
 		);
 	}
+
+	public static async getConnection(): Promise<Connection> {
+		if (!this.client) {
+			await this.connect();
+		}
+		return this.client!;
+	}
 }
