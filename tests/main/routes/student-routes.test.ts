@@ -48,7 +48,7 @@ describe("Student Routes", () => {
 			}
 
 			const students = await request(app).get("/students").query({ page: 1, limit: 3 });
-			expect(students.body.length).toBe(3);
+			expect(students.body.data.length).toBe(3);
 		});
 
 		it("Should return page 2 on load students", async () => {
@@ -61,7 +61,7 @@ describe("Student Routes", () => {
 			}
 
 			const students = await request(app).get("/students").query({ page: 2, limit: 2 });
-			expect(students.body).toEqual([
+			expect(students.body.data).toEqual([
 				{
 					id: 3,
 					name: "any_name",
