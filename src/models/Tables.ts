@@ -1,7 +1,9 @@
 import { Connection } from "mysql2";
+import { logger } from "../utils/logger.js";
 
 class Tables {
 	private connection: Connection;
+   private readonly logger = logger.child({ name: `api:${Tables.name}` });
 
    constructor(connection: Connection) {
       this.connection = connection;
@@ -15,7 +17,7 @@ class Tables {
          if(err) {
             console.error(err);
          } else {
-            console.log("Tabela alunos criada com sucesso!");
+            this.logger.info("Tabela alunos criada com sucesso!");
          }
       });
    }

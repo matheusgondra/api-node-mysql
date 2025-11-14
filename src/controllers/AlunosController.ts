@@ -2,7 +2,7 @@ import Model from "../models/Alunos.js";
 import { Request, Response } from "express";
 
 class AlunosController {
-   static getAlunos(req: Request, res: Response) {
+   static getAlunos(_req: Request, res: Response) {
       Model.getAlunos(res);
    }
 

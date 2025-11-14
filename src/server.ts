@@ -1,6 +1,7 @@
 import customApp from "./config/customApp.js";
 import connection from "./config/connection.js";
 import Tables from "./models/Tables.js";
+import { logger } from "./utils/logger.js";
 
 connection.connect(error => {
    if (error) {
@@ -12,7 +13,7 @@ connection.connect(error => {
       
       const app = customApp();
 
-      app.listen(3000, () => console.log("Servidor rodando na porta 3000"));
+      app.listen(3000, () => logger.info("Servidor rodando na porta 3000"));
    }
 });
 
