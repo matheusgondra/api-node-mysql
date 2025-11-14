@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node dist/server.js",
+    "start": "npm run build && node --env-file=.env dist/server.js",
     "build": "tsc"
   },
   "keywords": [],
