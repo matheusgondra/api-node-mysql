@@ -22,7 +22,7 @@ export const alunosPaths: OpenAPIV3.PathsObject[] = [
             description: "Lista de alunos obtida com sucesso",
             content: {
               "application/json": {
-                schema: Refs.student
+                schema: Refs.students
               }
             }
           }
@@ -71,7 +71,7 @@ export const alunosPaths: OpenAPIV3.PathsObject[] = [
             description: "Aluno obtido com sucesso",
             content: {
               "application/json": {
-                schema: Refs.students
+                schema: Refs.student
               }
             }
           }
