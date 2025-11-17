@@ -70,7 +70,7 @@ class Alunos {
             this.logger.error(err);
             return res.status(500).json({ message: err });
          } else {
-            return res.status(200).json({message: "Deletado com sucesso!"});
+            return res.status(200).json({ message: "Deletado com sucesso!" });
          }
       });
    }
