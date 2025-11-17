@@ -5,11 +5,11 @@ import { logger } from "./utils/logger.js";
 
 connection.connect(error => {
    if (error) {
-      console.error(error);
+      logger.error(error);
    } else {
-      console.log("Conectado com sucesso!");
+      logger.info("Conectado com sucesso!");
 		
-		const tables = new Tables(connection);
+		new Tables(connection);
       
       const app = customApp();
 
